@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamagotchi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: #ffffff49;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .progress {
+            height: 20px;
+            margin-top: 10px;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #4caf50;
+            transition: width 0.3s ease-in-out;
+        }
+        h1{
+            background-color: aquamarine;
+            padding: 20px;
+        }
+
+        .button {
+  all: unset;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0.6em 2em;
+  border: mediumspringgreen solid 0.15em;
+  border-radius: 0.25em;
+  color: mediumspringgreen;
+  font-size: 1.5em;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border 300ms, color 300ms;
+  user-select: none;
+}
+
+.button p {
+  z-index: 1;
+}
+
+.button:hover {
+  color: #212121;
+}
+
+.button:active {
+  border-color: teal;
+}
+
+.button::after, .button::before {
+  content: "";
+  position: absolute;
+  width: 9em;
+  aspect-ratio: 1;
+  background: mediumspringgreen;
+  opacity: 50%;
+  border-radius: 50%;
+  transition: transform 500ms, background 300ms;
+}
+
+.button::before {
+  left: 0;
+  transform: translateX(-8em);
+}
+
+.button::after {
+  right: 0;
+  transform: translateX(8em);
+}
+
+.button:hover:before {
+  transform: translateX(-1em);
+}
+
+.button:hover:after {
+  transform: translateX(1em);
+}
+
+.button:active:before,
+.button:active:after {
+  background: teal;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tamagotchi</h1>
+        <div id="status"></div>
+        <div class="progress">
+            <div id="fome-bar" class="progress-bar">fome</div>
+        </div>
+        <div class="progress">
+            <div id="felicidade-bar" class="progress-bar">felicidade</div>
+        </div>
+        <div class="progress">
+            <div id="energia-bar" class="progress-bar">Energia</div>
+        </div>
+        <div class="progress">
+            <div id="saude-bar" class="progress-bar">Saúde</div>
+        </div>
+       
+    </div>
+
+    <button class="button" onclick="alimentarPet()">
+        <p>Alimentar</p>
+      </button>
+
+      <button class="button" onclick="brincarComPet()">
+        <p>Brincar</p>
+      </button>
+
+      <button class="button" onclick="passarTempo()">
+        <p>Passar tempo</p>
+      </button>
+
+    <script>
+        
+        var virtualPet = new VirtualPet("Rex");
+
+        function updateStatus() {
+            document.getElementById("status").innerHTML = `
+                <p>Status atual de ${virtualPet.nome}:</p>
+                <p>Nível de fome: ${virtualPet.nivelDeFome}</p>
+                <p>Nível de felicidade: ${virtualPet.nivelFelicidade}</p>
+                <p>Nível de energia: ${virtualPet.nivelDeEnergia}</p>
+                <p>Nível de saúde: ${virtualPet.nivelDeSaude}</p>
+            `;
+
+            document.getElementById("fome-bar").style.width = virtualPet.nivelDeFome + "%";
+            document.getElementById("felicidade-bar").style.width = virtualPet.nivelFelicidade + "%";
+            document.getElementById("energia-bar").style.width = virtualPet.nivelDeEnergia + "%";
+            document.getElementById("saude-bar").style.width = virtualPet.nivelDeSaude + "%";
+        }
+
+        function alimentarPet() {
+            virtualPet.alimentar();
+            updateStatus();
+        }
+
+        function brincarComPet() {
+            virtualPet.brincar();
+            updateStatus();
+        }
+
+        function passarTempo() {
+            virtualPet.passarTempo();
+            updateStatus();
+        }
+
+        class VirtualPet {
+            constructor(nome) {
+                this.nome = nome;
+                this.nivelDeFome = 50;
+                this.nivelFelicidade = 50;
+                this.nivelDeEnergia = 100;
+                this.nivelDeSaude = 100;
+            }
+
+            alimentar() {
+                this.nivelDeFome -= 10;
+                console.log(this.nome + " foi alimentado. O nível de fome diminuiu.");
+            }
+
+            brincar() {
+                this.nivelFelicidade += 10;
+                console.log(this.nome + " está brincando e se sentindo mais feliz.");
+            }
+
+            passarTempo() {
+                this.nivelDeFome += 5;
+                console.log(this.nome + " está ficando mais faminto com o passar do tempo.");
+
+                this.nivelDeEnergia -= 10;
+                if (this.nivelDeEnergia <= 0) {
+                    console.log(this.nome + " está exausto!");
+                }
+
+                this.nivelDeSaude -= 2;
+                if (this.nivelDeSaude <= 0) {
+                    console.log(this.nome + " está doente!");
+                }
+            }
+        }
+        updateStatus();
+    </script>
+</body>
+</html>
